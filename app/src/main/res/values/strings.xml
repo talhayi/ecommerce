@@ -6,4 +6,6 @@
     <string name="search">Search</string>
     <string name="filters">Filters</string>
     <string name="select_filter">Select Fılter</string>
+    <string name="name">Name</string>
+    <string name="add_to_cart">add to cart</string>
 </resources>
