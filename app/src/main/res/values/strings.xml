@@ -8,4 +8,11 @@
     <string name="select_filter">Select Fılter</string>
     <string name="name">Name</string>
     <string name="add_to_cart">add to cart</string>
+    <string name="back">Back</string>
+    <string name="image_detail">Image Detail</string>
+    <string name="description">Description</string>
+    <string name="price">Price:</string>
+    <string name="favourite_image">Favourite Image</string>
+    <string name="detail">Detail</string>
+    <string name="product">product</string>
 </resources>

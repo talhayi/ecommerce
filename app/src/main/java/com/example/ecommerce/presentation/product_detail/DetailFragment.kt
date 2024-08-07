@@ -1,0 +1,51 @@
+package com.example.ecommerce.presentation.product_detail
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.example.ecommerce.R
+import com.example.ecommerce.databinding.FragmentDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class DetailFragment : Fragment() {
+    private lateinit var binding: FragmentDetailBinding
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        showDetail()
+        onBackButton()
+    }
+
+    private fun showDetail() {
+        val args: DetailFragmentArgs by navArgs()
+        val product = args.product
+        binding.apply {
+            textViewToolBar.text = product.name
+            textViewName.text = product.name
+            textViewDescription.text = product.description
+            textViewPrice.text = "${product.price} ₺"
+            Glide.with(this@DetailFragment).load(product.image).override(1000, 500)
+                .into(imageViewDetail)
+        }
+    }
+
+    private fun onBackButton() {
+        binding.imageViewBack.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_detailFragment_to_homeFragment)
+        }
+    }
+}

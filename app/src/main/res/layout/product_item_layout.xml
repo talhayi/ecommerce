@@ -36,8 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
-                android:padding="2dp"
                 android:background="@drawable/icon_favourite"
+                android:padding="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/icon_favourite" />
@@ -58,11 +58,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:lines="2"
+                android:maxWidth="150dp"
                 android:text="@string/name"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:maxWidth="150dp"
-                android:lines="2"
                 app:layout_constraintStart_toStartOf="@+id/productImageView"
                 app:layout_constraintTop_toBottomOf="@+id/textViewPrice" />
 
