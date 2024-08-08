@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.ecommerce.R
 import com.example.ecommerce.databinding.FragmentHomeBinding
 import com.example.ecommerce.presentation.adapter.ProductAdapter
+import com.example.ecommerce.presentation.cart.CartViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
+    private val cartViewModel: CartViewModel by viewModels()
     private lateinit var productAdapter: ProductAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,20 +34,18 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getProducts()
+        homeViewModel.getProducts()
         setupRecyclerView()
         observeProductList()
         onItemClick()
-
+        addToCart()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun observeProductList() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.products.collectLatest { productState ->
+            homeViewModel.products.collectLatest { productState ->
                 productState?.let { state ->
-                    productAdapter.productList = state.products
-                    productAdapter.notifyDataSetChanged()
+                    productAdapter.differ.submitList(state.products)
                     binding.progressBar.visibility =
                         if (state.isLoading) View.VISIBLE else View.GONE
                     binding.textViewError.apply {
@@ -65,9 +65,14 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
         }
     }
+    private fun addToCart(){
+        productAdapter.setOnAddToCartClickListener {
+            cartViewModel.saveCart(it)
+        }
+    }
 
     private fun setupRecyclerView() {
-        productAdapter = ProductAdapter(emptyList())
+        productAdapter = ProductAdapter()
         binding.recyclerView.apply {
             adapter = productAdapter
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)

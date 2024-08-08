@@ -3,19 +3,33 @@ package com.example.ecommerce.presentation.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.Navigation
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ecommerce.databinding.ProductItemLayoutBinding
 import com.example.ecommerce.domain.model.Product
 import com.example.ecommerce.presentation.products.HomeFragmentDirections
 
-class ProductAdapter(var productList: List<Product>) :
+class ProductAdapter :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
     private var onItemClickListener: ((Product) -> Unit)? = null
+    private var onAddToCartClickListener: ((Product) -> Unit)? = null
 
     inner class ProductViewHolder(var binding: ProductItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    private val diffCallBack = object : DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return newItem == oldItem
+        }
+    }
+
+   val differ = AsyncListDiffer(this, diffCallBack)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val binding =
@@ -24,12 +38,12 @@ class ProductAdapter(var productList: List<Product>) :
     }
 
     override fun getItemCount(): Int {
-        return productList.size
+        return differ.currentList.size
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val products = productList[position]
+        val products = differ.currentList[position]
         holder.binding.apply {
             textViewPrice.text = "${products.price} ₺"
             textViewName.text = products.name
@@ -39,13 +53,17 @@ class ProductAdapter(var productList: List<Product>) :
         holder.binding.root.setOnClickListener {
             onItemClickListener?.let { it(products) }
         }
-   /*     holder.binding.productCardView.setOnClickListener {
-            val actions = HomeFragmentDirections.actionHomeFragmentToDetailFragment(products)
-            Navigation.findNavController(it).navigate(actions)
-        }*/
+
+        holder.binding.buttonCart.setOnClickListener {
+            onAddToCartClickListener?.let { it(products) }
+        }
     }
 
     fun setOnItemClickListener(listener: (Product) -> Unit) {
         onItemClickListener = listener
+    }
+
+    fun setOnAddToCartClickListener(listener: (Product) -> Unit) {
+        onAddToCartClickListener = listener
     }
 }

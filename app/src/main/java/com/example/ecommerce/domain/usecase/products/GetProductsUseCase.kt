@@ -1,8 +1,7 @@
-package com.example.ecommerce.domain.usecase.get_products
+package com.example.ecommerce.domain.usecase.products
 
 
 import android.util.Log
-import com.example.ecommerce.data.remote.dto.toProductList
 import com.example.ecommerce.domain.model.Product
 import com.example.ecommerce.domain.repository.ProductRepository
 import com.example.ecommerce.util.Result
@@ -19,8 +18,8 @@ class GetProductsUseCase @Inject constructor(
         try {
             emit(Result.Loading)
             val productList = repository.getProductList()
-            emit(Result.Success(productList.toProductList()))
-            Log.e("executeGetProducts", "${productList.toProductList()[0].name}")
+            emit(Result.Success(productList))
+            Log.e("executeGetProducts", "${productList[0].name}")
         } catch (e: HttpException) {
             emit(Result.Error(message = e.localizedMessage ?: "Error!"))
         } catch (e: IOException) {

@@ -1,7 +1,7 @@
 package com.example.ecommerce.domain.repository
 
-import com.example.ecommerce.data.remote.dto.ProductDto
+import com.example.ecommerce.domain.model.Product
 
 interface ProductRepository {
-    suspend fun getProductList(): List<ProductDto>
+    suspend fun getProductList(): List<Product>
 }

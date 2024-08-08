@@ -2,7 +2,7 @@ package com.example.ecommerce.presentation.products
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommerce.domain.usecase.get_products.GetProductsUseCase
+import com.example.ecommerce.domain.usecase.products.GetProductsUseCase
 import com.example.ecommerce.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

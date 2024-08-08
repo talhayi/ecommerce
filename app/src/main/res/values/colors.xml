@@ -6,5 +6,6 @@
     <color name="second_color">#858585</color>
     <color name="light_gray">#ecf0f1</color>
     <color name="gray">#D9D9D9</color>
+    <color name="dark_gray">#7A7878</color>
     <color name="red">#E00D0D</color>
 </resources>
