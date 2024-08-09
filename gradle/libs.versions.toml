@@ -20,6 +20,7 @@ navigationFragmentKtx = "2.7.6"
 navigationSafeArgsGradlePlugin = "2.7.6"
 navigationUiKtx = "2.7.6"
 okhttp = "5.0.0-alpha.2"
+pagingRuntimeKtx = "3.3.2"
 retrofit = "2.11.0"
 roomCompiler = "2.6.1"
 roomKtx = "2.6.1"
@@ -30,6 +31,7 @@ activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activ
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigationSafeArgsGradlePlugin" }
+androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }

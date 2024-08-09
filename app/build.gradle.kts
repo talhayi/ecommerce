@@ -75,4 +75,6 @@ dependencies {
     implementation(libs.room.ktx)
     //Glide
     implementation(libs.glide)
+    //Paging3
+    implementation(libs.androidx.paging.runtime.ktx)
 }

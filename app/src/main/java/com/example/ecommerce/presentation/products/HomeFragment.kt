@@ -1,6 +1,5 @@
 package com.example.ecommerce.presentation.products
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +9,7 @@ import android.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.ecommerce.R
 import com.example.ecommerce.databinding.FragmentHomeBinding
@@ -21,6 +21,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Locale.filter
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -40,23 +41,33 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         homeViewModel.getProducts()
         setupRecyclerView()
-        observeProductList()
         onItemClick()
         addToCart()
         search()
+        observeProductList()
     }
 
     private fun observeProductList() {
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.products.collectLatest { productState ->
-                productState?.let { state ->
-                    productAdapter.differ.submitList(state.products)
-                    binding.progressBar.visibility =
-                        if (state.isLoading) View.VISIBLE else View.GONE
-                    binding.textViewError.apply {
-                        text = state.error
-                        visibility = if (state.error != null) View.VISIBLE else View.GONE
-                    }
+            homeViewModel.products.collectLatest { pagingData ->
+                productAdapter.submitData(pagingData)
+            }
+        }
+
+        lifecycleScope.launch {
+            productAdapter.loadStateFlow.collectLatest { loadStates ->
+                binding.progressBar.visibility =
+                    if (loadStates.refresh is LoadState.Loading ||
+                        loadStates.append is LoadState.Loading
+                    )  View.VISIBLE else View.GONE
+
+                val errorState = loadStates.source.append as? LoadState.Error
+                    ?: loadStates.source.prepend as? LoadState.Error
+                    ?: loadStates.refresh as? LoadState.Error
+
+                binding.textViewError.apply {
+                    text = errorState?.error?.localizedMessage
+                    visibility = if (errorState != null) View.VISIBLE else View.GONE
                 }
             }
         }
