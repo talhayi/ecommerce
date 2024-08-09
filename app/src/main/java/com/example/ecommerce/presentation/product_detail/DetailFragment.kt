@@ -5,16 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.ecommerce.R
 import com.example.ecommerce.databinding.FragmentDetailBinding
+import com.example.ecommerce.domain.model.Product
+import com.example.ecommerce.presentation.cart.CartViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
+    private val viewModel: CartViewModel by viewModels()
+    private lateinit var product: Product
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,11 +33,12 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         showDetail()
         onBackButton()
+        addToCart()
     }
 
     private fun showDetail() {
         val args: DetailFragmentArgs by navArgs()
-        val product = args.product
+        product = args.product
         binding.apply {
             textViewToolBar.text = product.name
             textViewName.text = product.name
@@ -46,6 +52,12 @@ class DetailFragment : Fragment() {
     private fun onBackButton() {
         binding.imageViewBack.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_detailFragment_to_homeFragment)
+        }
+    }
+
+    private fun addToCart() {
+        binding.buttonCart.setOnClickListener {
+            viewModel.saveCart(product)
         }
     }
 }
