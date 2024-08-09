@@ -63,6 +63,7 @@ class CartFragment : Fragment() {
                             "Product ID: ${product.id}, Quantity: ${product.quantity}"
                         )
                     }
+                    val isEmpty = state.products.isEmpty()
                     cartAdapter.differ.submitList(state.products)
                     binding.progressBar.visibility =
                         if (state.isLoading) View.VISIBLE else View.GONE
@@ -70,6 +71,9 @@ class CartFragment : Fragment() {
                         text = state.error
                         visibility = if (state.error != null) View.VISIBLE else View.GONE
                     }
+                    binding.textViewTotalPrice.visibility = if (isEmpty) View.GONE else View.VISIBLE
+                    binding.buttonComplete.visibility = if (isEmpty) View.GONE else View.VISIBLE
+
                 }
             }
         }

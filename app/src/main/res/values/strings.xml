@@ -20,4 +20,7 @@
     <string name="one">1</string>
     <string name="total">Total:</string>
     <string name="complete">Complete</string>
+    <string name="home">home</string>
+    <string name="cart">cart</string>
+    <string name="favourite">favourite</string>
 </resources>
