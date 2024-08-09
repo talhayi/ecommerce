@@ -20,8 +20,8 @@ class HomeViewModel @Inject constructor(
     private val _products = MutableStateFlow<ProductState?>(null)
     val products: StateFlow<ProductState?> = _products
 
-     fun getProducts() {
-        useCase.executeGetProducts().onEach { result ->
+     fun getProducts(name: String? = null) {
+        useCase.executeGetProducts(name).onEach { result ->
             when (result) {
                 is Result.Success -> {
                     _products.value = ProductState(products = result.data)

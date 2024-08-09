@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,6 +16,9 @@ import com.example.ecommerce.databinding.FragmentHomeBinding
 import com.example.ecommerce.presentation.adapter.ProductAdapter
 import com.example.ecommerce.presentation.cart.CartViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -39,6 +43,7 @@ class HomeFragment : Fragment() {
         observeProductList()
         onItemClick()
         addToCart()
+        search()
     }
 
     private fun observeProductList() {
@@ -84,5 +89,33 @@ class HomeFragment : Fragment() {
             }
             findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
         }
+    }
+
+    private fun search() {
+        var job: Job? = null
+        binding.editTextSearch.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                p0?.let {
+                    homeViewModel.getProducts(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                p0?.let {
+                    job?.cancel()
+                    job = MainScope().launch {
+                        delay(1000L)
+                        if (it.isNotEmpty()) {
+                            homeViewModel.getProducts(it)
+                        } else {
+                            homeViewModel.getProducts()
+                        }
+                    }
+                }
+                return true
+            }
+        }
+        )
     }
 }

@@ -14,10 +14,10 @@ import javax.inject.Inject
 class GetProductsUseCase @Inject constructor(
     private val repository: ProductRepository
 ) {
-    fun executeGetProducts(): Flow<Result<List<Product>>> = flow {
+    fun executeGetProducts(name: String? = null): Flow<Result<List<Product>>> = flow {
         try {
             emit(Result.Loading)
-            val productList = repository.getProductList()
+            val productList = repository.getProductList(name)
             emit(Result.Success(productList))
             Log.e("executeGetProducts", "${productList[0].name}")
         } catch (e: HttpException) {

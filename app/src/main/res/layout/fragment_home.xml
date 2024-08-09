@@ -35,7 +35,7 @@
     </androidx.appcompat.widget.Toolbar>
 
 
-    <EditText
+    <SearchView
         android:id="@+id/editTextSearch"
         android:layout_width="0dp"
         android:layout_height="40dp"
@@ -43,11 +43,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:autofillHints=""
+        android:iconifiedByDefault="false"
         android:background="@drawable/background_search_view"
         android:drawableStart="@drawable/icon_search"
         android:drawablePadding="4dp"
         android:fontFamily="@font/montserrat"
-        android:hint="@string/search"
+        android:queryHint="@string/search"
+        android:queryBackground="@android:color/transparent"
         android:inputType="text"
         android:paddingStart="8dp"
         android:textColorHint="@color/second_color"
