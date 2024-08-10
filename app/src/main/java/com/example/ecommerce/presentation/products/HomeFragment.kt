@@ -50,18 +50,23 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeProductList() {
-
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.filterOptions.collectLatest { filterOptions ->
-                filterOptions?.let {
-                    homeViewModel.getProducts()
+            homeViewModel.products.collectLatest { state ->
+                if (state.isLoading) {
+                    binding.progressBar.visibility = View.VISIBLE
+                } else {
+                    binding.progressBar.visibility = View.GONE
+                    state.products.let {
+                        productAdapter.submitData(it)
+                    }
                 }
-            }
-        }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.products.collectLatest { pagingData ->
-                productAdapter.submitData(pagingData)
+                state.error?.let {
+                    binding.textViewError.text = it
+                    binding.textViewError.visibility = View.VISIBLE
+                } ?: run {
+                    binding.textViewError.visibility = View.GONE
+                }
             }
         }
 
