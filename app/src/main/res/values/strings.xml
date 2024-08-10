@@ -23,4 +23,19 @@
     <string name="home">home</string>
     <string name="cart">cart</string>
     <string name="favourite">favourite</string>
+    <string name="filter">Filter</string>
+    <string name="old_to_new">Old to new</string>
+    <string name="new_to_old">New to old</string>
+    <string name="price_high_to_low">Price High to Low</string>
+    <string name="price_low_to_high">Price Low To High</string>
+    <string name="sort_by">Sort By</string>
+    <string name="brand">Brand</string>
+    <string name="model">Model</string>
+    <string name="primary">primary</string>
+    <string name="lamborghini">Lamborghini</string>
+    <string name="ferrari">Ferrari</string>
+    <string name="volkswagen">Volkswagen</string>
+    <string name="cts">CTS</string>
+    <string name="roadster">Roadster</string>
+    <string name="jetta">Jetta</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.example.ecommerce.presentation.products
 
-import com.example.ecommerce.domain.model.Product
+import com.example.ecommerce.data.model.Product
 
 data class ProductState(
     val isLoading: Boolean = false,

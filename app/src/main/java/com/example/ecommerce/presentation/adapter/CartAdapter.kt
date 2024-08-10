@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ecommerce.databinding.CartItemLayoutBinding
-import com.example.ecommerce.domain.model.Product
+import com.example.ecommerce.data.model.Product
 
 class CartAdapter() :
     RecyclerView.Adapter<CartAdapter.CartViewHolder>() {

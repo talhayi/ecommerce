@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView.OnQueryTextListener
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,18 +16,18 @@ import com.example.ecommerce.R
 import com.example.ecommerce.databinding.FragmentHomeBinding
 import com.example.ecommerce.presentation.adapter.ProductAdapter
 import com.example.ecommerce.presentation.cart.CartViewModel
+import com.example.ecommerce.presentation.filter.FilterOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.Locale.filter
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private val homeViewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
     private val cartViewModel: CartViewModel by viewModels()
     private lateinit var productAdapter: ProductAdapter
     override fun onCreateView(
@@ -44,10 +45,20 @@ class HomeFragment : Fragment() {
         onItemClick()
         addToCart()
         search()
+        filter()
         observeProductList()
     }
 
     private fun observeProductList() {
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.filterOptions.collectLatest { filterOptions ->
+                filterOptions?.let {
+                    homeViewModel.getProducts()
+                }
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.products.collectLatest { pagingData ->
                 productAdapter.submitData(pagingData)
@@ -59,7 +70,7 @@ class HomeFragment : Fragment() {
                 binding.progressBar.visibility =
                     if (loadStates.refresh is LoadState.Loading ||
                         loadStates.append is LoadState.Loading
-                    )  View.VISIBLE else View.GONE
+                    ) View.VISIBLE else View.GONE
 
                 val errorState = loadStates.source.append as? LoadState.Error
                     ?: loadStates.source.prepend as? LoadState.Error
@@ -73,7 +84,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun onItemClick(){
+    private fun onItemClick() {
         productAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
                 putSerializable(getString(R.string.product), it)
@@ -81,7 +92,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
         }
     }
-    private fun addToCart(){
+    private fun addToCart() {
         productAdapter.setOnAddToCartClickListener {
             cartViewModel.saveCart(it)
         }
@@ -93,13 +104,6 @@ class HomeFragment : Fragment() {
             adapter = productAdapter
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }
-
-        productAdapter.setOnItemClickListener { product ->
-            val bundle = Bundle().apply {
-                putSerializable(getString(R.string.product), product)
-            }
-            findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
-        }
     }
 
     private fun search() {
@@ -107,7 +111,7 @@ class HomeFragment : Fragment() {
         binding.editTextSearch.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 p0?.let {
-                    homeViewModel.getProducts(it)
+                    homeViewModel.setFilterOptions(FilterOptions(name = it))
                 }
                 return true
             }
@@ -117,16 +121,17 @@ class HomeFragment : Fragment() {
                     job?.cancel()
                     job = MainScope().launch {
                         delay(1000L)
-                        if (it.isNotEmpty()) {
-                            homeViewModel.getProducts(it)
-                        } else {
-                            homeViewModel.getProducts()
-                        }
+                        homeViewModel.setFilterOptions(FilterOptions(name = it))
                     }
                 }
                 return true
             }
+        })
+    }
+
+    private fun filter() {
+        binding.buttonFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_filterFragment)
         }
-        )
     }
 }

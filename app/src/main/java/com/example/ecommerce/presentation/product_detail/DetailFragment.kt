@@ -11,7 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.ecommerce.R
 import com.example.ecommerce.databinding.FragmentDetailBinding
-import com.example.ecommerce.domain.model.Product
+import com.example.ecommerce.data.model.Product
 import com.example.ecommerce.presentation.cart.CartViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

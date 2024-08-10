@@ -1,7 +1,7 @@
 package com.example.ecommerce.data.repository
 
 import com.example.ecommerce.data.local.ProductDao
-import com.example.ecommerce.domain.model.Product
+import com.example.ecommerce.data.model.Product
 import com.example.ecommerce.domain.repository.CartRepository
 import javax.inject.Inject
 

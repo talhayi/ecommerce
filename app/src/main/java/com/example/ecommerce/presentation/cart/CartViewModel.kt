@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommerce.domain.model.Product
+import com.example.ecommerce.data.model.Product
 import com.example.ecommerce.domain.usecase.cart.ClearCartUseCase
 import com.example.ecommerce.domain.usecase.cart.DeleteCartUseCase
 import com.example.ecommerce.domain.usecase.cart.GetCartsUseCase

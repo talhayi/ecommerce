@@ -1,6 +1,6 @@
 package com.example.ecommerce.domain.usecase.cart
 
-import com.example.ecommerce.domain.model.Product
+import com.example.ecommerce.data.model.Product
 import com.example.ecommerce.domain.repository.CartRepository
 import com.example.ecommerce.util.Result
 import kotlinx.coroutines.flow.Flow

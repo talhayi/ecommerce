@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ecommerce.databinding.ProductItemLayoutBinding
-import com.example.ecommerce.domain.model.Product
+import com.example.ecommerce.data.model.Product
 
 class ProductAdapter : PagingDataAdapter<Product, ProductAdapter.ProductViewHolder>(diffCallBack) {
 

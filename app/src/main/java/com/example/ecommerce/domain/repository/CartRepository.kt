@@ -1,6 +1,6 @@
 package com.example.ecommerce.domain.repository
 
-import com.example.ecommerce.domain.model.Product
+import com.example.ecommerce.data.model.Product
 
 interface CartRepository {
     suspend fun saveCart(product: Product)

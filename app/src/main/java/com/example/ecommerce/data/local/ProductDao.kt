@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.ecommerce.domain.model.Product
+import com.example.ecommerce.data.model.Product
 
 @Dao
 interface ProductDao {
