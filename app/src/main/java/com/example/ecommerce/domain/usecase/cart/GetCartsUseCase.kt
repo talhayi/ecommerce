@@ -15,7 +15,11 @@ class GetCartsUseCase @Inject constructor(
         try {
             emit(Result.Loading)
             val cartList = cartRepository.getCartList()
-            emit(Result.Success(cartList))
+            if (cartList.isEmpty()){
+                emit(Result.Error("Cart is empty"))
+            }else {
+                emit(Result.Success(cartList))
+            }
             Log.e("GetCartsUseCase", "$cartList")
         } catch (e: Exception) {
             emit(Result.Error(e.localizedMessage ?: "An unexpected error occurred"))
