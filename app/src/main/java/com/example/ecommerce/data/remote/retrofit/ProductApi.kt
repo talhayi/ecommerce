@@ -10,8 +10,5 @@ interface ProductApi {
     @GET("products")
     suspend fun productList(
         @Query("name") name: String? = null,
-        @Query("brand") brands: List<String>?,
-        @Query("model") models: List<String>?,
-       /* @Query("sortBy") sortBy: SortOption?,*/
     ): List<Product>
 }
