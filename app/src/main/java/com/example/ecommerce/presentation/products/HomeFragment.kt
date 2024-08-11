@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.ecommerce.R
 import com.example.ecommerce.databinding.FragmentHomeBinding
@@ -64,6 +65,7 @@ class HomeFragment : Fragment() {
                 state.error?.let {
                     binding.textViewError.text = it
                     binding.textViewError.visibility = View.VISIBLE
+                    productAdapter.submitData(PagingData.empty())
                 } ?: run {
                     binding.textViewError.visibility = View.GONE
                 }
