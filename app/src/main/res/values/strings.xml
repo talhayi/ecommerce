@@ -38,4 +38,5 @@
     <string name="cts">CTS</string>
     <string name="roadster">Roadster</string>
     <string name="jetta">Jetta</string>
+    <string name="close">Close</string>
 </resources>

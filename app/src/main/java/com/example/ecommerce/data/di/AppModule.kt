@@ -7,8 +7,10 @@ import com.example.ecommerce.data.local.ProductDatabase
 import com.example.ecommerce.data.remote.retrofit.ApiUtils
 import com.example.ecommerce.data.remote.retrofit.ProductApi
 import com.example.ecommerce.data.repository.CartRepositoryImpl
+import com.example.ecommerce.data.repository.FilterRepositoryImpl
 import com.example.ecommerce.data.repository.ProductRepositoryImpl
 import com.example.ecommerce.domain.repository.CartRepository
+import com.example.ecommerce.domain.repository.FilterRepository
 import com.example.ecommerce.domain.repository.ProductRepository
 import dagger.Module
 import dagger.Provides
@@ -20,6 +22,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideFilterRepository(productApi: ProductApi): FilterRepository {
+        return FilterRepositoryImpl(productApi)
+    }
+
     @Provides
     @Singleton
     fun provideProductRepository(productApi: ProductApi): ProductRepository {
