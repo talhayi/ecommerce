@@ -39,4 +39,5 @@
     <string name="roadster">Roadster</string>
     <string name="jetta">Jetta</string>
     <string name="close">Close</string>
+    <string name="no_products_available">No products available</string>
 </resources>

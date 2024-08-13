@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.ecommerce.R
 import com.example.ecommerce.databinding.FragmentHomeBinding
@@ -53,40 +52,29 @@ class HomeFragment : Fragment() {
     private fun observeProductList() {
         viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.products.collectLatest { state ->
-                if (state.isLoading) {
-                    binding.progressBar.visibility = View.VISIBLE
-                } else {
-                    binding.progressBar.visibility = View.GONE
-                    state.products.let {
-                        productAdapter.submitData(it)
-                    }
-                }
-
-                state.error?.let {
-                    binding.textViewError.text = it
-                    binding.textViewError.visibility = View.VISIBLE
-                    productAdapter.submitData(PagingData.empty())
-                } ?: run {
-                    binding.textViewError.visibility = View.GONE
+                updateUI(
+                    isLoading = state.isLoading,
+                    error = state.error,
+                    itemCount = productAdapter.itemCount
+                )
+                if (!state.isLoading && state.products != null) {
+                    productAdapter.submitData(state.products)
                 }
             }
         }
 
         lifecycleScope.launch {
             productAdapter.loadStateFlow.collectLatest { loadStates ->
-                binding.progressBar.visibility =
-                    if (loadStates.refresh is LoadState.Loading ||
-                        loadStates.append is LoadState.Loading
-                    ) View.VISIBLE else View.GONE
-
+                val isLoading = loadStates.refresh is LoadState.Loading || loadStates.append is LoadState.Loading
                 val errorState = loadStates.source.append as? LoadState.Error
                     ?: loadStates.source.prepend as? LoadState.Error
                     ?: loadStates.refresh as? LoadState.Error
 
-                binding.textViewError.apply {
-                    text = errorState?.error?.localizedMessage
-                    visibility = if (errorState != null) View.VISIBLE else View.GONE
-                }
+                updateUI(
+                    isLoading = isLoading,
+                    error = errorState?.error?.localizedMessage,
+                    itemCount = productAdapter.itemCount
+                )
             }
         }
     }
@@ -99,6 +87,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
         }
     }
+
     private fun addToCart() {
         productAdapter.setOnAddToCartClickListener {
             cartViewModel.saveCart(it)
@@ -139,6 +128,34 @@ class HomeFragment : Fragment() {
     private fun filter() {
         binding.buttonFilter.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_filterFragment)
+        }
+    }
+
+
+    private fun updateUI(isLoading: Boolean, error: String?, itemCount: Int) {
+        when {
+            isLoading -> {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.textViewError.visibility = View.GONE
+                binding.recyclerView.visibility = View.GONE
+            }
+            error != null && itemCount == 0 -> {
+                binding.progressBar.visibility = View.GONE
+                binding.textViewError.text = error
+                binding.textViewError.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.GONE
+            }
+            itemCount == 0 -> {
+                binding.progressBar.visibility = View.GONE
+                binding.textViewError.text = getString(R.string.no_products_available)
+                binding.textViewError.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.GONE
+            }
+            else -> {
+                binding.progressBar.visibility = View.GONE
+                binding.textViewError.visibility = View.GONE
+                binding.recyclerView.visibility = View.VISIBLE
+            }
         }
     }
 }
