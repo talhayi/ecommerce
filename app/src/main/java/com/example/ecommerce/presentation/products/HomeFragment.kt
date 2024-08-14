@@ -137,7 +137,6 @@ class HomeFragment : Fragment() {
             isLoading -> {
                 binding.progressBar.visibility = View.VISIBLE
                 binding.textViewError.visibility = View.GONE
-                binding.recyclerView.visibility = View.GONE
             }
             error != null && itemCount == 0 -> {
                 binding.progressBar.visibility = View.GONE
