@@ -135,6 +135,30 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <SearchView
+                    android:id="@+id/searchViewBrand"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:autofillHints=""
+                    android:background="@drawable/background_search_view"
+                    android:drawableStart="@drawable/icon_search"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/montserrat"
+                    android:iconifiedByDefault="false"
+                    android:inputType="text"
+                    android:paddingStart="8dp"
+                    android:queryBackground="@android:color/transparent"
+                    android:queryHint="@string/search"
+                    android:textColorHint="@color/second_color"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@+id/recyclerViewBrand"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewBrand" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewBrand"
                     android:layout_width="match_parent"
@@ -142,7 +166,7 @@
                     android:scrollbars="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewBrand"
+                    app:layout_constraintTop_toBottomOf="@+id/searchViewBrand"
                     tools:listitem="@layout/check_box_item_layout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -179,6 +203,30 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <SearchView
+                    android:id="@+id/searchViewModel"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:autofillHints=""
+                    android:background="@drawable/background_search_view"
+                    android:drawableStart="@drawable/icon_search"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/montserrat"
+                    android:iconifiedByDefault="false"
+                    android:inputType="text"
+                    android:paddingStart="8dp"
+                    android:queryBackground="@android:color/transparent"
+                    android:queryHint="@string/search"
+                    android:textColorHint="@color/second_color"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@+id/recyclerViewModel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewModel" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewModel"
                     android:layout_width="match_parent"
@@ -186,7 +234,7 @@
                     android:scrollbars="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewModel"
+                    app:layout_constraintTop_toBottomOf="@+id/searchViewModel"
                     tools:listitem="@layout/check_box_item_layout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

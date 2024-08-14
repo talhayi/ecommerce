@@ -23,10 +23,14 @@ class FilterViewModel @Inject constructor(
         fetchFilters()
     }
 
-    private fun fetchFilters() {
+    fun fetchFilters(brand: String? = null, model: String? = null) {
         viewModelScope.launch {
-            getFilterUseCase().collect { result ->
-                _filterState.value = result
+            getFilterUseCase(brand = brand, model = model).collect { result ->
+                _filterState.value = when(result){
+                    is Result.Loading -> Result.Loading
+                    is Result.Success -> Result.Success(result.data)
+                    is Result.Error -> Result.Error(result.message)
+                }
             }
         }
     }

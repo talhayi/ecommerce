@@ -8,7 +8,10 @@ import javax.inject.Inject
 class FilterRepositoryImpl @Inject constructor(
     private val productApi: ProductApi
 ) : FilterRepository {
-    override suspend fun getFilterList(): List<Product> {
-        return productApi.productList()
+    override suspend fun getFilterList(
+        brand: String?,
+        model: String?
+    ): List<Product> {
+        return productApi.productList(brand = brand, model = model)
     }
 }

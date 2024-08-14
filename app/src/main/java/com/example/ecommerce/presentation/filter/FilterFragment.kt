@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +19,9 @@ import com.example.ecommerce.presentation.products.HomeViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class FilterFragment : BottomSheetDialogFragment() {
@@ -43,6 +45,8 @@ class FilterFragment : BottomSheetDialogFragment() {
         observeFilters()
         onPrimaryButton()
         onBackButton()
+        searchBrand()
+        searchModel()
     }
 
     private fun setupRecyclerViews(brands: List<String?>, models: List<String?>) {
@@ -64,19 +68,15 @@ class FilterFragment : BottomSheetDialogFragment() {
                         val uniqueBrands = filterViewModel.getBrands(products)
                         val uniqueModels = filterViewModel.getModels(products)
                         setupRecyclerViews(uniqueBrands, uniqueModels)
-                        binding.progressBar.visibility = View.GONE
-                        binding.textViewError.visibility = View.GONE
+                        updateUI(isLoading = false, error = null, itemCount = products.size)
                     }
+
                     is Result.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.textViewError.apply {
-                            text = result.message
-                            visibility = View.VISIBLE
-                        }
+                        updateUI(isLoading = false, error = result.message, itemCount = 0)
                     }
+
                     is Result.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.textViewError.visibility = View.GONE
+                        updateUI(isLoading = true, error = null, itemCount = 0)
                     }
                 }
             }
@@ -131,5 +131,71 @@ class FilterFragment : BottomSheetDialogFragment() {
                 behavior.isDraggable = !recyclerView.canScrollVertically(-2)
             }
         })
+    }
+
+    private fun searchBrand() {
+        var job: Job? = null
+        binding.searchViewBrand.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                p0?.let {
+                    filterViewModel.fetchFilters(brand = it)
+                }
+                return true
+            }
+            override fun onQueryTextChange(p0: String?): Boolean {
+                p0?.let {
+                    job?.cancel()
+                    job = MainScope().launch {
+                        delay(1000L)
+                        filterViewModel.fetchFilters (brand = it)
+                    }
+                }
+                return true
+            }
+        })
+    }
+
+    private fun searchModel() {
+        var job: Job? = null
+        binding.searchViewModel.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                p0?.let {
+                    filterViewModel.fetchFilters(model = it)
+                }
+                return true
+            }
+            override fun onQueryTextChange(p0: String?): Boolean {
+                p0?.let {
+                    job?.cancel()
+                    job = MainScope().launch {
+                        delay(1000L)
+                        filterViewModel.fetchFilters (model = it)
+                    }
+                }
+                return true
+            }
+        })
+    }
+
+    private fun updateUI(isLoading: Boolean, error: String?, itemCount: Int) {
+        when {
+            isLoading -> {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.textViewError.visibility = View.GONE
+            }
+            error != null -> {
+                binding.progressBar.visibility = View.GONE
+                binding.textViewError.text = error
+                binding.textViewError.visibility = View.VISIBLE
+                binding.recyclerViewBrand.visibility = View.INVISIBLE
+                binding.recyclerViewModel.visibility = View.INVISIBLE
+            }
+            else -> {
+                binding.progressBar.visibility = View.GONE
+                binding.textViewError.visibility = View.GONE
+                binding.recyclerViewBrand.visibility = View.VISIBLE
+                binding.recyclerViewModel.visibility = View.VISIBLE
+            }
+        }
     }
 }
