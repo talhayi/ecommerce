@@ -17,4 +17,10 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navHostFragment.navController)
     }
+
+    fun cartBadge(itemCount: Int) {
+        val badge = binding.bottomNavigationView.getOrCreateBadge(R.id.cartFragment)
+        badge.isVisible = itemCount > 0
+        badge.number = itemCount
+    }
 }

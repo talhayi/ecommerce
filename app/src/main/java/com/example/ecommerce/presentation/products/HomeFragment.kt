@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.ecommerce.MainActivity
 import com.example.ecommerce.R
 import com.example.ecommerce.databinding.FragmentHomeBinding
 import com.example.ecommerce.presentation.adapter.ProductAdapter
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val homeViewModel: HomeViewModel by activityViewModels()
-    private val cartViewModel: CartViewModel by viewModels()
+    private val cartViewModel: CartViewModel by activityViewModels()
     private lateinit var productAdapter: ProductAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +47,7 @@ class HomeFragment : Fragment() {
         search()
         filter()
         observeProductList()
+        observeBadgeItemCount()
     }
 
     private fun observeProductList() {
@@ -75,6 +76,15 @@ class HomeFragment : Fragment() {
                     error = errorState?.error?.localizedMessage,
                     itemCount = productAdapter.itemCount
                 )
+            }
+        }
+    }
+
+    private fun observeBadgeItemCount() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            cartViewModel.getCartList()
+            cartViewModel.badgeCount.collect { badgeCount ->
+                (activity as? MainActivity)?.cartBadge(badgeCount)
             }
         }
     }

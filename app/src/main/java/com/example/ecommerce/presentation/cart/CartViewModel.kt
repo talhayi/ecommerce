@@ -34,6 +34,9 @@ class CartViewModel @Inject constructor(
     private val _totalPrice = MutableStateFlow("0.00")
     val totalPrice: StateFlow<String> = _totalPrice
 
+    private val _badgeCount = MutableStateFlow(0)
+    val badgeCount: StateFlow<Int> = _badgeCount
+
     fun updateQuantity(productId: Int, quantity: Int) {
         Log.d("CartViewModel", "Before Update - Product ID: $productId, Quantity: $quantity")
         viewModelScope.launch {
@@ -82,6 +85,7 @@ class CartViewModel @Inject constructor(
                             Log.d("CartViewModel", "Cart List Retrieved: ${result.data}")
                             _cartState.value = CartState(products = result.data)
                             _totalPrice.value = calculateTotalPrice(result.data)
+                            _badgeCount.value = result.data.size
                         }
 
                         is Result.Error -> {
@@ -128,6 +132,7 @@ class CartViewModel @Inject constructor(
                     is Result.Success -> {
                         _cartState.value = CartState(products = emptyList())
                         _totalPrice.value = "0.00"
+                        _badgeCount.value = 0
                     }
 
                     is Result.Error -> {

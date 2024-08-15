@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import com.example.ecommerce.R
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.ecommerce.MainActivity
 import com.example.ecommerce.databinding.FragmentCartBinding
 import com.example.ecommerce.presentation.adapter.CartAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CartFragment : Fragment() {
     private lateinit var binding: FragmentCartBinding
-    private val viewModel: CartViewModel by viewModels()
+    private val viewModel: CartViewModel by activityViewModels()
     private lateinit var cartAdapter: CartAdapter
 
     override fun onCreateView(
@@ -42,6 +43,7 @@ class CartFragment : Fragment() {
         onItemClick()
         clearCart()
         observeTotalPrice()
+        observeBadgeItemCount()
     }
 
     private fun setupRecyclerView() {
@@ -122,6 +124,14 @@ class CartFragment : Fragment() {
         binding.buttonComplete.setOnClickListener {
             viewModel.clearCart()
             findNavController().navigate(R.id.action_cartFragment_to_homeFragment)
+        }
+    }
+
+    private fun observeBadgeItemCount() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.badgeCount.collectLatest { badgeCount ->
+                (activity as? MainActivity)?.cartBadge(badgeCount)
+            }
         }
     }
 }
